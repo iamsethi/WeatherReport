@@ -1,8 +1,7 @@
 package com.ndtv.social.pages;
 
 import com.ndtv.social.api.WeatherApiActions;
-import com.ndtv.social.utilities.Temperature;
-import com.ndtv.social.utilities.TemperatureCompare;
+import com.ndtv.social.utilities.WeatherComparator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -75,19 +74,19 @@ public class NdtvWeatherPage extends BasePage {
         int position = 0;
         switch (option.name()) {
             case "CONDITION":
-                position = WeatherDetail.CONDITION.ordinal();
+                position = NdtvWeatherPage.WeatherDetail.CONDITION.ordinal();
                 break;
             case "WIND":
-                position = WeatherDetail.WIND.ordinal();
+                position = NdtvWeatherPage.WeatherDetail.WIND.ordinal();
                 break;
             case "HUMIDITY":
-                position = WeatherDetail.HUMIDITY.ordinal();
+                position = NdtvWeatherPage.WeatherDetail.HUMIDITY.ordinal();
                 break;
             case "CELCIUS":
-                position = WeatherDetail.CELCIUS.ordinal();
+                position = NdtvWeatherPage.WeatherDetail.CELCIUS.ordinal();
                 break;
             case "FARENHEIT":
-                position = WeatherDetail.FARENHEIT.ordinal();
+                position = NdtvWeatherPage.WeatherDetail.FARENHEIT.ordinal();
                 break;
         }
         return position;
@@ -97,44 +96,44 @@ public class NdtvWeatherPage extends BasePage {
         lbl_weather_detail.stream().map(e -> e.isDisplayed());
     }
 
-    public ArrayList<Temperature> weatherDetailsWeb(String city) {
+    public ArrayList<com.ndtv.social.utilities.WeatherDetail> weatherDetailsWeb(String city) {
         List<String> weatherDetail = lbl_weather_detail
                 .stream()
                 .map(e -> e.getText())
                 .map(e -> e.split(": ")[1])
                 .collect(Collectors.toList());
 
-        ArrayList<Temperature> temp = new ArrayList<>();
-        temp.add(new Temperature(WeatherDetail.CELCIUS.name(), Integer.parseInt(weatherDetail.get(getWeatherPosition(WeatherDetail.CELCIUS)))));
-        temp.add(new Temperature(WeatherDetail.FARENHEIT.name(), Integer.parseInt(weatherDetail.get(getWeatherPosition(WeatherDetail.FARENHEIT)))));
-        temp.add(new Temperature(WeatherDetail.HUMIDITY.name(), Integer.parseInt(weatherDetail.get(getWeatherPosition(WeatherDetail.HUMIDITY)).split("%")[0])));
+        ArrayList<com.ndtv.social.utilities.WeatherDetail> temp = new ArrayList<>();
+        temp.add(new com.ndtv.social.utilities.WeatherDetail(NdtvWeatherPage.WeatherDetail.CELCIUS.name(), Integer.parseInt(weatherDetail.get(getWeatherPosition(NdtvWeatherPage.WeatherDetail.CELCIUS)))));
+        temp.add(new com.ndtv.social.utilities.WeatherDetail(NdtvWeatherPage.WeatherDetail.FARENHEIT.name(), Integer.parseInt(weatherDetail.get(getWeatherPosition(NdtvWeatherPage.WeatherDetail.FARENHEIT)))));
+        temp.add(new com.ndtv.social.utilities.WeatherDetail(NdtvWeatherPage.WeatherDetail.HUMIDITY.name(), Integer.parseInt(weatherDetail.get(getWeatherPosition(NdtvWeatherPage.WeatherDetail.HUMIDITY)).split("%")[0])));
         return temp;
     }
 
-    public ArrayList<Temperature> weatherDetailsApi() {
-        ArrayList<Temperature> temp = new ArrayList<>();
-        temp.add(new Temperature(WeatherDetail.CELCIUS.name(), weatherApiActions.tempInCelcius));
-        temp.add(new Temperature(WeatherDetail.FARENHEIT.name(), weatherApiActions.tempInFarenheit));
-        temp.add(new Temperature(WeatherDetail.HUMIDITY.name(), weatherApiActions.humidity));
+    public ArrayList<com.ndtv.social.utilities.WeatherDetail> weatherDetailsApi() {
+        ArrayList<com.ndtv.social.utilities.WeatherDetail> temp = new ArrayList<>();
+        temp.add(new com.ndtv.social.utilities.WeatherDetail(NdtvWeatherPage.WeatherDetail.CELCIUS.name(), weatherApiActions.tempInCelcius));
+        temp.add(new com.ndtv.social.utilities.WeatherDetail(NdtvWeatherPage.WeatherDetail.FARENHEIT.name(), weatherApiActions.tempInFarenheit));
+        temp.add(new com.ndtv.social.utilities.WeatherDetail(NdtvWeatherPage.WeatherDetail.HUMIDITY.name(), weatherApiActions.humidity));
         return temp;
     }
 
-    public ArrayList<Temperature> temperatureComparison(ArrayList<Temperature> weatherDetailsWeb, ArrayList<Temperature> weatherDetailsApi) {
-        ArrayList<Temperature> temp = new ArrayList<>();
+    public ArrayList<com.ndtv.social.utilities.WeatherDetail> temperatureComparison(ArrayList<com.ndtv.social.utilities.WeatherDetail> weatherDetailsWeb, ArrayList<com.ndtv.social.utilities.WeatherDetail> weatherDetailsApi) {
+        ArrayList<com.ndtv.social.utilities.WeatherDetail> temp = new ArrayList<>();
         temp.addAll(weatherDetailsWeb);
         temp.addAll(weatherDetailsApi);
-        Collections.sort(temp, new TemperatureCompare());
-        for (Temperature t : temp) {
+        Collections.sort(temp, new WeatherComparator());
+        for (com.ndtv.social.utilities.WeatherDetail t : temp) {
             System.out.println(t.getUnit() + "::" + t.getTemp());
         }
         return temp;
     }
 
-    public void weatherComparisonWithVariance(ArrayList<Temperature> weatherDetails, Object variance) {
+    public void weatherComparisonWithVariance(ArrayList<com.ndtv.social.utilities.WeatherDetail> weatherDetails, Object variance) {
         SoftAssert asserts = new SoftAssert();
         ArrayList<Double> temp = new ArrayList<>();
         int diff;
-        for (Temperature t : weatherDetails) {
+        for (com.ndtv.social.utilities.WeatherDetail t : weatherDetails) {
             temp.add(t.getTemp());
         }
         for (int i = 0; i < weatherDetails.size() - 1; i = i + 2) {

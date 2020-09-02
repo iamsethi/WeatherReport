@@ -2,7 +2,7 @@ package com.ndtv.social;
 
 import com.ndtv.social.pages.NdtvHomePage;
 import com.ndtv.social.pages.NdtvWeatherPage;
-import com.ndtv.social.utilities.Temperature;
+import com.ndtv.social.utilities.WeatherDetail;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -35,9 +35,9 @@ public class NdtvWeatherPageTests extends BaseTest {
         ndtvWeatherPage = ndtvHomepage.navigateToWeatherSection(environment, city);
         ndtvWeatherPage.searchCity(city);
         ndtvWeatherPage.selectCity(city);
-        ArrayList<Temperature> weatherDetailsWeb = ndtvWeatherPage.weatherDetailsWeb(city);
-        ArrayList<Temperature> weatherDetailsApi = ndtvWeatherPage.weatherDetailsApi();
-        ArrayList<Temperature> weatherDetails = ndtvWeatherPage.temperatureComparison(weatherDetailsWeb, weatherDetailsApi);
+        ArrayList<WeatherDetail> weatherDetailsWeb = ndtvWeatherPage.weatherDetailsWeb(city);
+        ArrayList<WeatherDetail> weatherDetailsApi = ndtvWeatherPage.weatherDetailsApi();
+        ArrayList<WeatherDetail> weatherDetails = ndtvWeatherPage.temperatureComparison(weatherDetailsWeb, weatherDetailsApi);
         ndtvWeatherPage.weatherComparisonWithVariance(weatherDetails, config.get("variance"));
     }
 
