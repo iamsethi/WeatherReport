@@ -37,6 +37,12 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.9.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.relevantcodes</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>2.41.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -57,6 +63,9 @@
                     <systemPropertyVariables>
                         <testng.dtd.http>true</testng.dtd.http>
                     </systemPropertyVariables>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/TestNGxmls/TestNG_WeatherPage.xml</suiteXmlFile>
+                    </suiteXmlFiles>
                 </configuration>
             </plugin>
         </plugins>
