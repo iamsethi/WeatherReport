@@ -20,6 +20,5 @@ UI-API Automation TestNG Framework for execution on Chrome
 ## Reports
 /target/surefire-reports/ExtentReportTestNG.html
 
-## Commands To Execute
-* Run shell file under bin folder
-* CLI execution - mvn clean test -Dbrowser=chrome
+## Deployment instructions for local execution
+* CLI execution - mvn clean test
